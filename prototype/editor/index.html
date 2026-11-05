@@ -9,7 +9,7 @@
       <div class="panel-heading">ИНСТРУМЕНТЫ</div>
       <button class="tool active" data-tool="select"><span>⌖</span> Выбор</button>
       <button class="tool" data-tool="move"><span>✥</span> Перемещение</button>
-      <button class="tool" data-tool="erase"><span>⌫</span> Ластик</button>
+      <button class="tool" data-tool="erase"><span>⌫</span> Ластик</button><button class="tool" data-tool="pan"><span>✋</span> Рука</button><button id="duplicateBtn" class="tool"><span>▣</span> Дубликат</button>
       <div class="separator"></div>
       <div class="panel-heading">МАСШТАБ</div>
       <div class="zoom-row"><button id="zoomOut">−</button><span id="zoomValue">100%</span><button id="zoomIn">+</button></div>
@@ -17,7 +17,7 @@
       <div class="panel-heading">СЦЕНА</div>
       <label class="switch-row"><span>Сетка</span><input id="gridToggle" type="checkbox" checked></label>
       <label class="switch-row"><span>Привязка</span><input id="snapToggle" type="checkbox" checked></label>
-      <div class="hint">Выбери объект снизу и нажми на поле, чтобы добавить его.</div>
+      <div class="panel-heading">СЛОИ</div><div id="layerList" class="layer-list"></div><button id="addLayerBtn" class="secondary">＋ ДОБАВИТЬ СЛОЙ</button><div class="hint">Выбери объект снизу и нажми на поле, чтобы добавить его.</div>
     </aside>
     <section class="editor-area">
       <div class="canvas-toolbar"><span><i class="status-dot"></i> РЕДАКТОР УРОВНЯ</span><span id="objectCount">ОБЪЕКТОВ: 0</span><button id="testBtn" class="play-btn">▶ ТЕСТ УРОВНЯ</button></div>
@@ -31,7 +31,7 @@
           <button class="object" data-kind="platform"><b>▬</b><span>Платформа</span></button>
           <button class="object" data-kind="orb"><b>●</b><span>Сфера</span></button>
           <button class="object" data-kind="portal"><b>◉</b><span>Портал</span></button>
-          <button class="object" data-kind="saw"><b>✹</b><span>Пила</span></button>
+          <button class="object" data-kind="saw"><b>✹</b><span>Пила</span></button><button class="object" data-kind="coin"><b>◈</b><span>Монета</span></button><button class="object" data-kind="speed"><b>»</b><span>Ускорение</span></button><button class="object" data-kind="gravity"><b>↕</b><span>Гравитация</span></button><button class="object" data-kind="color"><b>◉</b><span>Цвет</span></button><button class="object" data-kind="move"><b>↔</b><span>Движение</span></button>
         </div>
       </div>
     </section>
@@ -41,15 +41,15 @@
       <div id="properties" hidden>
         <label>ТИП ОБЪЕКТА<input id="propType" disabled></label>
         <label>ПОЗИЦИЯ X<input id="propX" type="number"></label>
-        <label>ПОЗИЦИЯ Y<input id="propY" type="number"></label>
-        <button id="deleteSelected" class="danger">УДАЛИТЬ ОБЪЕКТ</button>
+        <label>ПОЗИЦИЯ Y<input id="propY" type="number"></label><label>ШИРИНА<input id="propW" type="number" min="5" max="400"></label><label>ВЫСОТА<input id="propH" type="number" min="5" max="400"></label><label>ПОВОРОТ<input id="propRotation" type="number" min="-360" max="360"></label><label>ГРУППА<input id="propGroup" type="number" min="0"></label><label>СЛОЙ<select id="propLayer"></select></label><label>ЦВЕТ<input id="propColor" type="color" value="#8d45d8"></label>
+        <button id="duplicateSelected" class="secondary">ДУБЛИРОВАТЬ</button><button id="deleteSelected" class="danger">УДАЛИТЬ ОБЪЕКТ</button>
       </div>
       <div class="separator"></div>
       <div class="panel-heading">УРОВЕНЬ</div>
       <label>НАЗВАНИЕ<input id="nameInput" value="Мой первый уровень" maxlength="32"></label>
       <label>ЦВЕТ ФОНА<select id="bgSelect"><option value="violet">Фиолетовый</option><option value="blue">Синий</option><option value="dark">Тёмный</option></select></label>
       <button id="exportBtn" class="secondary">ЭКСПОРТ JSON ↓</button>
-      <button id="importBtn" class="secondary">ИМПОРТ JSON ↑</button>
+      <button id="importBtn" class="secondary">ИМПОРТ JSON ↑</button><button id="validateBtn" class="secondary">ПРОВЕРИТЬ УРОВЕНЬ</button><div id="validationReport" class="validation-report" aria-live="polite"></div>
       <div class="separator"></div>
       <div class="panel-heading">МУЗЫКА УРОВНЯ</div>
       <label>ССЫЛКА НА NEWGROUNDS
@@ -72,8 +72,8 @@
   </div>
   <div class="editor-foot">GDPS EDITOR 2.3 <span>СОБСТВЕННЫЙ ПРОТОТИП · BUILD 0.2</span><span id="saveState">НЕ СОХРАНЕНО</span></div>
 </section>
-<section id="page-profile" class="page"><div class="page-heading"><div><span class="eyebrow">ТВОЯ УЧЁТНАЯ ЗАПИСЬ</span><h1>ПРОФИЛЬ</h1><p>Локальная статистика редактора.</p></div></div><div class="profile-card"><div class="avatar">G</div><div><h2>Создатель</h2><p>Профиль на этом устройстве</p></div><span class="local-tag">OFFLINE</span></div><div class="stats-grid"><div class="stat-card"><strong id="statLevels">0</strong><span>УРОВНЕЙ</span></div><div class="stat-card"><strong id="statObjects">0</strong><span>ОБЪЕКТОВ В ПРОЕКТАХ</span></div><div class="stat-card"><strong>2.3</strong><span>ВЕРСИЯ РЕДАКТОРА</span></div></div><p class="note">Сетевой аккаунт и публикация пока не подключены.</p></section>
-<section id="page-settings" class="page"><div class="page-heading"><div><span class="eyebrow">ПЕРСОНАЛИЗАЦИЯ</span><h1>НАСТРОЙКИ</h1><p>Настрой внешний вид и поведение редактора.</p></div></div><div class="settings-card"><div class="setting-row"><div><b>Показывать сетку</b><small>Сетка на рабочем поле</small></div><input id="settingGrid" type="checkbox" checked></div><div class="setting-row"><div><b>Привязка к сетке</b><small>Ровное размещение объектов</small></div><input id="settingSnap" type="checkbox" checked></div><div class="setting-row"><div><b>Анимация интерфейса</b><small>Плавные переходы между экранами</small></div><input id="settingMotion" type="checkbox" checked></div><div class="setting-row"><div><b>Цвет оформления</b><small>Тема приложения</small></div><select id="settingTheme"><option value="purple">Фиолетовая</option><option value="blue">Синяя</option></select></div></div><div class="about-card"><b>GDPS EDITOR 2.3</b><p>Собственный интерфейсный прототип · версия 0.2</p><small>Создание уровней · Локальные проекты · Редактор</small></div></section></main>
+<section id="page-profile" class="page"><div class="page-heading"><div><span class="eyebrow">ТВОЯ УЧЁТНАЯ ЗАПИСЬ</span><h1>ПРОФИЛЬ</h1><p>Локальная статистика редактора.</p></div></div><div class="profile-card"><div class="avatar">G</div><div><h2>Создатель</h2><p>Профиль на этом устройстве</p></div><span class="local-tag">OFFLINE</span></div><div class="stats-grid"><div class="stat-card"><strong id="statWins">0</strong><span>ПОБЕД</span></div><div class="stat-card"><strong id="statLevels">0</strong><span>УРОВНЕЙ</span></div><div class="stat-card"><strong id="statObjects">0</strong><span>ОБЪЕКТОВ В ПРОЕКТАХ</span></div><div class="stat-card"><strong>2.3</strong><span>ВЕРСИЯ РЕДАКТОРА</span></div></div><p class="note">Сетевой аккаунт и публикация пока не подключены.</p></section>
+<section id="page-settings" class="page"><div class="page-heading"><div><span class="eyebrow">ПЕРСОНАЛИЗАЦИЯ</span><h1>НАСТРОЙКИ</h1><p>Настрой внешний вид и поведение редактора.</p></div></div><div class="settings-card"><div class="setting-row"><div><b>Показывать сетку</b><small>Сетка на рабочем поле</small></div><input id="settingGrid" type="checkbox" checked></div><div class="setting-row"><div><b>Привязка к сетке</b><small>Ровное размещение объектов</small></div><input id="settingSnap" type="checkbox" checked></div><div class="setting-row"><div><b>Анимация интерфейса</b><small>Плавные переходы между экранами</small></div><input id="settingMotion" type="checkbox" checked></div><div class="setting-row"><div><b>Звуки интерфейса</b><small>Звуковые сигналы редактора</small></div><input id="settingSound" type="checkbox" checked></div><div class="setting-row"><div><b>Цвет оформления</b><small>Тема приложения</small></div><select id="settingTheme"><option value="purple">Фиолетовая</option><option value="blue">Синяя</option></select></div></div><div class="about-card"><b>ДОСТИЖЕНИЯ</b><p id="achievementList">Создай уровень и пройди его, чтобы открыть достижения.</p></div><div class="about-card"><b>GDPS EDITOR 2.3</b><p>Собственный интерфейсный прототип · версия 0.2</p><small>Создание уровней · Локальные проекты · Редактор</small></div></section></main>
 <div id="gameOverlay" class="game-overlay" aria-hidden="true">
   <header class="game-topbar">
     <button id="gameBackBtn" class="game-back">← НАЗАД</button>

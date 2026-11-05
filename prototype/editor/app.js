@@ -1,55 +1,51 @@
-(()=>{
-const canvas=document.querySelector('#levelCanvas'),ctx=canvas.getContext('2d');
-const $=s=>document.querySelector(s);
-const labels={block:'Блок',spike:'Шип',platform:'Платформа',orb:'Сфера',portal:'Портал',saw:'Пила'};
-let objects=[{id:1,kind:'block',x:170,y:440},{id:2,kind:'spike',x:300,y:440},{id:3,kind:'platform',x:430,y:410},{id:4,kind:'saw',x:650,y:430}];
-let selected=null,kind='block',tool='select',zoom=1,bg='violet',history=[],future=[],testing=false,nextId=5;
-const snap=()=>$('#snapToggle').checked?20:1;
-function snapshot(){history.push(JSON.stringify(objects));if(history.length>60)history.shift();future=[]}
-function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)}
-function draw(){
- const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);
- const colors={violet:['#170b2a','#25103c'],blue:['#071c30','#0d3150'],dark:['#090b12','#171b28']}[bg];
- const grad=ctx.createLinearGradient(0,0,w,h);grad.addColorStop(0,colors[0]);grad.addColorStop(1,colors[1]);ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
- if($('#gridToggle').checked){ctx.strokeStyle='#9e65d51c';ctx.lineWidth=1;for(let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}for(let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}}
- ctx.fillStyle='#a94cff';ctx.shadowColor='#9e43ff';ctx.shadowBlur=15;ctx.fillRect(0,500,w,4);ctx.shadowBlur=0;
- objects.forEach(o=>{ctx.save();ctx.translate(o.x,o.y);ctx.lineWidth=4;ctx.strokeStyle='#d7a5ff';ctx.fillStyle=o.kind==='orb'?'#31ddff':'#7e2bd1';ctx.shadowColor='#a34dff';ctx.shadowBlur=12;
- if(o.kind==='block'){ctx.fillRect(-25,-25,50,50);ctx.strokeRect(-25,-25,50,50)}
- if(o.kind==='spike'){ctx.beginPath();ctx.moveTo(-25,25);ctx.lineTo(0,-25);ctx.lineTo(25,25);ctx.closePath();ctx.fill();ctx.stroke()}
- if(o.kind==='platform'){ctx.fillRect(-42,-9,84,18);ctx.strokeRect(-42,-9,84,18)}
- if(o.kind==='orb'){ctx.beginPath();ctx.arc(0,0,20,0,Math.PI*2);ctx.fill();ctx.stroke()}
- if(o.kind==='portal'){ctx.beginPath();ctx.ellipse(0,0,17,30,0,0,Math.PI*2);ctx.stroke();ctx.lineWidth=7;ctx.strokeStyle='#29dfff';ctx.beginPath();ctx.ellipse(0,0,9,23,0,0,Math.PI*2);ctx.stroke()}
- if(o.kind==='saw'){ctx.beginPath();for(let i=0;i<24;i++){const a=i*Math.PI/12,r=i%2?19:30;ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke()}
- if(selected===o.id){ctx.shadowBlur=0;ctx.strokeStyle='#31e5ff';ctx.setLineDash([7,5]);ctx.strokeRect(-37,-37,74,74)}
- ctx.restore()});
- $('#objectCount').textContent='ОБЪЕКТОВ: '+objects.length;
-}
-function select(id){selected=id;const o=objects.find(x=>x.id===id);$('#emptyProperties').hidden=!!o;$('#properties').hidden=!o;if(o){$('#propType').value=labels[o.kind];$('#propX').value=o.x;$('#propY').value=o.y}draw()}
-function canvasPoint(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height}}
-canvas.addEventListener('pointerdown',e=>{if(testing)return;const p=canvasPoint(e);const hit=[...objects].reverse().find(o=>Math.abs(o.x-p.x)<38&&Math.abs(o.y-p.y)<38);
- if(tool==='erase'){if(hit){snapshot();objects=objects.filter(o=>o.id!==hit.id);select(null)}return}
- if(tool==='select'&&hit){select(hit.id);return}
- if(tool==='move'&&hit){select(hit.id);return}
- if(tool==='select'||tool==='move'){const s=snap();snapshot();objects.push({id:nextId++,kind,x:Math.round(p.x/s)*s,y:Math.round(p.y/s)*s});select(objects.at(-1).id);$('#saveState').textContent='ЕСТЬ ИЗМЕНЕНИЯ'}
-});
-document.querySelectorAll('.object').forEach(b=>b.onclick=()=>{kind=b.dataset.kind;document.querySelectorAll('.object').forEach(x=>x.classList.toggle('active',x===b));toast('Выбран объект: '+labels[kind])});
-document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{tool=b.dataset.tool;document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('active',x===b));toast('Инструмент: '+b.textContent.trim())});
-function updateProp(axis,val){const o=objects.find(x=>x.id===selected);if(!o)return;snapshot();o[axis]=Number(val)||0;draw();$('#saveState').textContent='ЕСТЬ ИЗМЕНЕНИЯ'}
-$('#propX').onchange=e=>updateProp('x',e.target.value);$('#propY').onchange=e=>updateProp('y',e.target.value);
-$('#deleteSelected').onclick=()=>{if(selected==null)return;snapshot();objects=objects.filter(o=>o.id!==selected);select(null)};
-$('#undoBtn').onclick=()=>{if(!history.length)return;future.push(JSON.stringify(objects));objects=JSON.parse(history.pop());select(null)};
-$('#redoBtn').onclick=()=>{if(!future.length)return;history.push(JSON.stringify(objects));objects=JSON.parse(future.pop());select(null)};
-$('#zoomIn').onclick=()=>{zoom=Math.min(2,zoom+.1);$('#zoomValue').textContent=Math.round(zoom*100)+'%';canvas.style.transform='scale('+zoom+')';canvas.style.transformOrigin='center center'};
-$('#zoomOut').onclick=()=>{zoom=Math.max(.6,zoom-.1);$('#zoomValue').textContent=Math.round(zoom*100)+'%';canvas.style.transform='scale('+zoom+')';canvas.style.transformOrigin='center center'};
-$('#bgSelect').onchange=e=>{bg=e.target.value;draw()};
-$('#nameInput').oninput=e=>{const label=$('#levelName');if(label)label.textContent=e.target.value};
-const renameButton=$('#renameBtn');if(renameButton)renameButton.onclick=()=>{$('#nameInput').focus();$('#nameInput').select()};
-function data(){return {format:'gdps-editor-level',version:1,name:$('#nameInput').value,background:bg,objects}}
-function download(){const blob=new Blob([JSON.stringify(data(),null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='gdps-level.json';a.click();URL.revokeObjectURL(a.href)}
-/* Save is handled by the application shell; export remains a separate action. */
-$('#exportBtn').onclick=download;
-$('#importBtn').onclick=()=>$('#fileInput').click();
-$('#fileInput').onchange=async e=>{try{const d=JSON.parse(await e.target.files[0].text());if(d.format!=='gdps-editor-level'||!Array.isArray(d.objects))throw Error();snapshot();objects=d.objects;nextId=Math.max(0,...objects.map(o=>o.id))+1;$('#nameInput').value=d.name||'Импортированный уровень';$('#levelName').textContent=$('#nameInput').value;bg=d.background||'violet';$('#bgSelect').value=bg;select(null);toast('Уровень загружен')}catch{toast('Не удалось прочитать файл уровня')}e.target.value=''};
-$('#testBtn').onclick=()=>{testing=!testing;$('#testBtn').textContent=testing?'■ ВЫЙТИ ИЗ ТЕСТА':'▶ ТЕСТ УРОВНЯ';toast(testing?'Режим просмотра включён':'Режим просмотра выключен')};
-draw();window.GDPSLevel={getObjects:()=>JSON.parse(JSON.stringify(objects)),load:p=>{objects=JSON.parse(JSON.stringify(p.objects||[]));nextId=Math.max(0,...objects.map(o=>o.id))+1;bg=p.background||'violet';$('#bgSelect').value=bg;select(null);draw()}};$('#gridToggle').addEventListener('change',draw);
+(()=>{'use strict';
+const $=s=>document.querySelector(s),canvas=$('#levelCanvas'),ctx=canvas.getContext('2d');
+const labels={block:'Блок',spike:'Шип',platform:'Платформа',orb:'Сфера',portal:'Портал',saw:'Пила',coin:'Монета',speed:'Ускорение',gravity:'Гравитация',color:'Цветовой триггер',move:'Триггер движения'};
+let objects=[],layers=[{id:1,name:'Основной слой',visible:true,locked:false}],activeLayer=1,selected=null,kind='block',tool='select',bg='violet',history=[],future=[],nextId=1,drag=null;
+const snap=()=>$('#snapToggle').checked?20:1,clone=v=>JSON.parse(JSON.stringify(v));
+function snapshot(){history.push(JSON.stringify({objects,layers,activeLayer}));if(history.length>80)history.shift();future=[]}
+function restore(raw){const d=JSON.parse(raw);objects=d.objects||[];layers=d.layers||layers;activeLayer=d.activeLayer||1;selected=null;renderLayers();draw();showProps()}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1500)}
+function visible(o){return layers.find(l=>l.id===o.layer)?.visible!==false}
+function renderLayers(){const list=$('#layerList');if(!list)return;list.replaceChildren();layers.forEach(l=>{const row=document.createElement('div');row.className='layer-row'+(l.id===activeLayer?' active':'');const pick=document.createElement('button');pick.textContent=l.name;pick.onclick=()=>{activeLayer=l.id;renderLayers()};const vis=document.createElement('button');vis.textContent=l.visible?'◉':'○';vis.title='Показать/скрыть';vis.onclick=()=>{l.visible=!l.visible;renderLayers();draw()};const lock=document.createElement('button');lock.textContent=l.locked?'🔒':'🔓';lock.title='Блокировка слоя';lock.onclick=()=>{l.locked=!l.locked;renderLayers()};row.append(pick,vis,lock);list.append(row)});const sel=$('#propLayer');if(sel){sel.replaceChildren(...layers.map(l=>{const o=document.createElement('option');o.value=l.id;o.textContent=l.name;return o}))}}
+function showProps(){const o=objects.find(x=>x.id===selected);$('#emptyProperties').hidden=!!o;$('#properties').hidden=!o;if(!o)return;$('#propType').value=labels[o.kind]||o.kind;[['propX','x'],['propY','y'],['propW','w'],['propH','h'],['propRotation','rotation'],['propGroup','group'],['propLayer','layer'],['propColor','color']].forEach(([id,k])=>{const el=$('#'+id);if(el)el.value=o[k]??({w:50,h:50,rotation:0,group:0,color:'#8d45d8'}[k]??activeLayer)})}
+function draw(){const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);const colors={violet:['#170b2a','#25103c'],blue:['#071c30','#0d3150'],dark:['#090b12','#171b28']}[bg]||['#170b2a','#25103c'];const g=ctx.createLinearGradient(0,0,w,h);g.addColorStop(0,colors[0]);g.addColorStop(1,colors[1]);ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+if($('#gridToggle').checked){ctx.strokeStyle='#9e65d51c';for(let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}for(let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}}
+ctx.fillStyle='#a94cff';ctx.fillRect(0,500,w,4);
+objects.filter(visible).forEach(o=>{ctx.save();ctx.translate(o.x,o.y);ctx.rotate((o.rotation||0)*Math.PI/180);const sx=(o.w||50)/50,sy=(o.h||50)/50;ctx.scale(sx,sy);ctx.lineWidth=4;ctx.strokeStyle='#e8d4ff';ctx.fillStyle=o.color||(['orb','coin'].includes(o.kind)?'#31ddff':'#7e2bd1');ctx.shadowColor=o.color||'#a34dff';ctx.shadowBlur=12;
+if(o.kind==='block'){ctx.fillRect(-25,-25,50,50);ctx.strokeRect(-25,-25,50,50)}
+else if(o.kind==='spike'){ctx.beginPath();ctx.moveTo(-25,25);ctx.lineTo(0,-25);ctx.lineTo(25,25);ctx.closePath();ctx.fill();ctx.stroke()}
+else if(o.kind==='platform'){ctx.fillRect(-42,-9,84,18);ctx.strokeRect(-42,-9,84,18)}
+else if(o.kind==='orb'||o.kind==='coin'){ctx.beginPath();ctx.arc(0,0,o.kind==='coin'?13:20,0,Math.PI*2);ctx.fill();ctx.stroke()}
+else if(o.kind==='portal'||o.kind==='speed'||o.kind==='gravity'||o.kind==='color'||o.kind==='move'){ctx.beginPath();ctx.ellipse(0,0,17,30,0,0,Math.PI*2);ctx.stroke();ctx.lineWidth=7;ctx.strokeStyle=o.color||'#29dfff';ctx.beginPath();ctx.ellipse(0,0,9,23,0,0,Math.PI*2);ctx.stroke()}
+else if(o.kind==='saw'){ctx.beginPath();for(let i=0;i<24;i++){const a=i*Math.PI/12,r=i%2?19:30;ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke()}
+if(selected===o.id){ctx.shadowBlur=0;ctx.strokeStyle='#31e5ff';ctx.setLineDash([7,5]);ctx.strokeRect(-37,-37,74,74)}ctx.restore()});
+$('#objectCount').textContent='ОБЪЕКТОВ: '+objects.length}
+function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height}}
+function hitAt(p){return [...objects].reverse().find(o=>visible(o)&&Math.abs(o.x-p.x)<Math.max(38,(o.w||50)*.65)&&Math.abs(o.y-p.y)<Math.max(38,(o.h||50)*.65))}
+function select(id){selected=id;showProps();draw()}
+canvas.addEventListener('pointerdown',e=>{const p=point(e),hit=hitAt(p);if(tool==='erase'){if(hit&&!layers.find(l=>l.id===hit.layer)?.locked){snapshot();objects=objects.filter(o=>o.id!==hit.id);select(null)}return}
+if((tool==='select'||tool==='move')&&hit){select(hit.id);if(!layers.find(l=>l.id===hit.layer)?.locked){snapshot();drag={id:hit.id,start:p,ox:hit.x,oy:hit.y};canvas.setPointerCapture(e.pointerId)}return}
+if(tool==='select'||tool==='move'){const s=snap();snapshot();const o={id:nextId++,kind,x:Math.round(p.x/s)*s,y:Math.round(p.y/s)*s,w:50,h:50,rotation:0,group:0,layer:activeLayer,color:null};objects.push(o);select(o.id);$('#saveState').textContent='ЕСТЬ ИЗМЕНЕНИЯ'}});
+canvas.addEventListener('pointermove',e=>{if(!drag)return;const o=objects.find(x=>x.id===drag.id);if(!o)return;const p=point(e),s=snap();o.x=Math.round((drag.ox+p.x-drag.start.x)/s)*s;o.y=Math.round((drag.oy+p.y-drag.start.y)/s)*s;showProps();draw()});
+function endDrag(){if(drag){drag=null;$('#saveState').textContent='ЕСТЬ ИЗМЕНЕНИЯ'}}canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);
+document.querySelectorAll('.object').forEach(b=>b.onclick=()=>{kind=b.dataset.kind;document.querySelectorAll('.object').forEach(x=>x.classList.toggle('active',x===b));toast('Выбран объект: '+(labels[kind]||kind))});
+document.querySelectorAll('.tool').forEach(b=>{if(b.dataset.tool)b.onclick=()=>{tool=b.dataset.tool;document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('active',x===b));toast('Инструмент: '+b.textContent.trim())}});
+function duplicate(){const o=objects.find(x=>x.id===selected);if(!o)return;snapshot();const n={...clone(o),id:nextId++,x:o.x+snap(),y:o.y+snap()};objects.push(n);select(n.id)}
+$('#duplicateBtn').onclick=duplicate;$('#duplicateSelected').onclick=duplicate;$('#deleteSelected').onclick=()=>{if(selected==null)return;snapshot();objects=objects.filter(o=>o.id!==selected);select(null)};
+$('#addLayerBtn').onclick=()=>{snapshot();const id=Math.max(0,...layers.map(l=>l.id))+1;layers.push({id,name:'Слой '+id,visible:true,locked:false});activeLayer=id;renderLayers()};
+$('#undoBtn').onclick=()=>{if(history.length){future.push(JSON.stringify({objects,layers,activeLayer}));restore(history.pop())}};$('#redoBtn').onclick=()=>{if(future.length){history.push(JSON.stringify({objects,layers,activeLayer}));restore(future.pop())}};
+[['propX','x'],['propY','y'],['propW','w'],['propH','h'],['propRotation','rotation'],['propGroup','group'],['propLayer','layer'],['propColor','color']].forEach(([id,k])=>$('#'+id)?.addEventListener('change',e=>{const o=objects.find(x=>x.id===selected);if(!o)return;snapshot();o[k]=k==='color'?e.target.value:Number(e.target.value);if(k==='layer')o.layer=Number(o.layer);draw();showProps();$('#saveState').textContent='ЕСТЬ ИЗМЕНЕНИЯ'}));
+let zoom=1;$('#zoomIn').onclick=()=>{zoom=Math.min(2,zoom+.1);$('#zoomValue').textContent=Math.round(zoom*100)+'%';canvas.style.transform='scale('+zoom+')';canvas.style.transformOrigin='center center'};$('#zoomOut').onclick=()=>{zoom=Math.max(.6,zoom-.1);$('#zoomValue').textContent=Math.round(zoom*100)+'%';canvas.style.transform='scale('+zoom+')';canvas.style.transformOrigin='center center'};
+$('#bgSelect').onchange=e=>{bg=e.target.value;draw()};$('#exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(data(),null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='gdps-level.json';a.click();URL.revokeObjectURL(a.href)};
+function data(){return{format:'gdps-editor-level',version:2,name:$('#nameInput').value,background:bg,objects:clone(objects),layers:clone(layers)}}
+function validate(){const issues=[];if(!objects.length)issues.push('Уровень пустой');objects.forEach(o=>{if(!labels[o.kind])issues.push('Неизвестный тип объекта #'+o.id);if(!Number.isFinite(o.x)||!Number.isFinite(o.y))issues.push('Некорректная позиция объекта #'+o.id);if(o.x<0||o.x>100000||o.y<0||o.y>620)issues.push('Объект #'+o.id находится за пределами рабочей области');if(o.kind==='spike'&&o.y>490)issues.push('Шип #'+o.id может пересекаться с землёй')});const ids=new Set(objects.map(o=>o.id));if(ids.size!==objects.length)issues.push('Есть повторяющиеся ID объектов');const report=$('#validationReport');report.textContent=issues.length?'НАЙДЕНО ПРОБЛЕМ: '+issues.length+'\n• '+issues.join('\n• '):'ПРОВЕРКА ПРОЙДЕНА · '+objects.length+' объектов';report.classList.toggle('has-errors',!!issues.length);return issues}
+$('#validateBtn').onclick=()=>{validate();toast('Проверка уровня завершена')};
+$('#importBtn').onclick=()=>$('#fileInput').click();$('#fileInput').onchange=async e=>{try{const d=JSON.parse(await e.target.files[0].text());if(d.format!=='gdps-editor-level'||!Array.isArray(d.objects)||d.objects.some(o=>!labels[o.kind]))throw Error('invalid');snapshot();objects=d.objects.map((o,i)=>({...o,id:Number(o.id)||i+1,layer:Number(o.layer)||1}));layers=Array.isArray(d.layers)&&d.layers.length?d.layers:[{id:1,name:'Основной слой',visible:true,locked:false}];activeLayer=layers[0].id;nextId=Math.max(0,...objects.map(o=>o.id))+1;$('#nameInput').value=d.name||'Импортированный уровень';bg=d.background||'violet';$('#bgSelect').value=bg;renderLayers();select(null);toast('Уровень загружен')}catch{toast('Не удалось прочитать файл уровня')}e.target.value=''};
+$('#testBtn').onclick=()=>{toast('Переход в игровой тест');window.GDPSGame?.start({name:$('#nameInput').value,background:bg,objects:clone(objects),music:window.GDPSMusic?.getMetadata()})};
+$('#gridToggle').addEventListener('change',draw);
+function load(p){objects=clone(p.objects||[]).map((o,i)=>({w:50,h:50,rotation:0,group:0,layer:1,...o,id:Number(o.id)||i+1}));layers=clone(p.layers||[{id:1,name:'Основной слой',visible:true,locked:false}]);activeLayer=layers[0]?.id||1;nextId=Math.max(0,...objects.map(o=>o.id))+1;bg=p.background||'violet';$('#bgSelect').value=bg;renderLayers();select(null)}
+function getData(){return data()}
+window.GDPSLevel={getObjects:()=>clone(objects),getData,load,validate};
+renderLayers();draw();showProps();
 })();
