@@ -228,13 +228,13 @@
     elapsed += dt;
     const previousBottom = player.y + PLAYER_SIZE * 0.43;
     const wasGrounded = player.grounded;
-    player.grounded = false;
     player.x += BASE_SPEED * speedMultiplier * dt;
 
     if (jumpQueued) {
       doJump();
       jumpQueued = false;
     }
+    player.grounded = false;
 
     player.vy += GRAVITY * dt;
     player.y += player.vy * dt;
@@ -299,7 +299,7 @@
 
     cameraX = clamp(player.x - 250, 0, Math.max(0, worldEnd - WIDTH));
     updateProgress();
-    if (player.x >= worldEnd - 120) complete();
+    if (player.x >= worldEnd - 40) complete();
   }
 
   function burst(x, y, color, count) {
