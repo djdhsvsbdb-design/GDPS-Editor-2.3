@@ -22,7 +22,7 @@
   const GROUND = 500;
   const PLAYER_SIZE = 42;
   const GRAVITY = 2100;
-  const JUMP_VELOCITY = -735;
+  const JUMP_VELOCITY = -820;
   const BASE_SPEED = 350;
   const PALETTES = {
     violet: { top: '#10091d', bottom: '#32104b', glow: '#bd67ff', accent: '#37dcff', ground: '#9d4de8' },
