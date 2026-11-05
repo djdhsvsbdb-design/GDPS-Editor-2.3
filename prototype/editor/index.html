@@ -1,19 +1,10 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#100820">
-  <title>GDPS EDITOR 2.3 — Editor Preview</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header class="topbar">
-    <div class="brand"><span class="brand-mark">G</span><div><strong>GDPS EDITOR 2.3</strong><small>LEVEL WORKSHOP</small></div></div>
-    <div class="project"><span class="status-dot"></span><span id="levelName">Мой первый уровень</span><button id="renameBtn" class="icon-btn" title="Переименовать">✎</button></div>
-    <div class="top-actions"><button id="undoBtn" class="icon-btn" title="Отменить">↶</button><button id="redoBtn" class="icon-btn" title="Повторить">↷</button><button id="saveBtn" class="primary">СОХРАНИТЬ</button></div>
-  </header>
-  <main class="workspace">
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#100820"><title>GDPS EDITOR 2.3</title><link rel="stylesheet" href="style.css"></head><body>
+<div id="bootScreen" class="boot-screen"><div class="boot-logo">G</div><div class="boot-title">GDPS EDITOR <b>2.3</b></div><div class="boot-sub">CREATE · PLAY · SHARE</div><div class="boot-progress"><i></i></div><small>ЗАГРУЗКА РЕДАКТОРА…</small></div>
+<header class="topbar"><button class="brand brand-button" data-page="home"><span class="brand-mark">G</span><span><strong>GDPS EDITOR 2.3</strong><small>CREATE YOUR WORLD</small></span></button><nav class="main-nav"><button class="nav-btn active" data-page="home">Главная</button><button class="nav-btn" data-page="levels">Уровни</button><button class="nav-btn" data-page="editor">Редактор</button><button class="nav-btn" data-page="profile">Профиль</button></nav><div class="top-actions"><button class="icon-btn" data-page="settings">⚙</button><span class="online-pill">● ЛОКАЛЬНО</span></div></header>
+<main>
+<section id="page-home" class="page active"><div class="hero"><div class="hero-copy"><div class="eyebrow">✦ ТВОРЧЕСТВО БЕЗ ГРАНИЦ</div><h1>ТВОЙ МИР.<br><em>ТВОИ ПРАВИЛА.</em></h1><p>Создавай уровни, проверяй идеи и собирай собственные игровые миры.</p><div class="hero-actions"><button class="big-primary" data-page="editor">＋ СОЗДАТЬ УРОВЕНЬ</button><button class="big-secondary" data-page="levels">МОИ УРОВНИ</button></div></div><div class="hero-art"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="hero-cube">G</div><div class="float-shape shape-one">◆</div><div class="float-shape shape-two">✦</div><div class="float-shape shape-three">▲</div><div class="art-caption">GDPS / 2.3</div></div></div><div class="section-head"><div><span class="eyebrow">ТВОЯ МАСТЕРСКАЯ</span><h2>БЫСТРЫЙ ДОСТУП</h2></div></div><div class="quick-grid"><button class="quick-card" data-page="editor"><span class="quick-icon purple">✎</span><b>Новый уровень</b><small>Начни создавать с нуля</small><strong>ОТКРЫТЬ →</strong></button><button class="quick-card" data-page="levels"><span class="quick-icon cyan">▤</span><b>Мои уровни</b><small>Продолжи свои проекты</small><strong>СМОТРЕТЬ →</strong></button><button class="quick-card" data-page="settings"><span class="quick-icon pink">⚙</span><b>Настройки</b><small>Настрой игру под себя</small><strong>ИЗМЕНИТЬ →</strong></button></div><div class="section-head"><div><span class="eyebrow">НЕДАВНИЕ ПРОЕКТЫ</span><h2>ПОСЛЕДНИЕ УРОВНИ</h2></div></div><div id="recentList" class="level-grid"></div></section>
+<section id="page-levels" class="page"><div class="page-heading"><div><span class="eyebrow">БИБЛИОТЕКА ПРОЕКТОВ</span><h1>МОИ УРОВНИ</h1><p>Управляй своими творениями.</p></div><button class="big-primary" data-page="editor">＋ НОВЫЙ УРОВЕНЬ</button></div><div class="filter-row"><input id="levelSearch" placeholder="Поиск по названию…"><select id="levelSort"><option value="new">Сначала новые</option><option value="name">По названию</option></select></div><div id="allLevels" class="level-grid"></div></section>
+<section id="page-editor" class="page editor-page"><div class="editor-heading"><div><span class="eyebrow">WORKSHOP / LEVEL BUILDER</span><h1>РЕДАКТОР УРОВНЯ</h1></div><div class="editor-heading-actions"><button class="small-secondary" data-page="levels">← К УРОВНЯМ</button><button id="undoBtn" class="icon-btn">↶</button><button id="redoBtn" class="icon-btn">↷</button><button id="saveBtn" class="primary">СОХРАНИТЬ</button></div></div>  <div class="workspace">
     <aside class="left-panel panel">
       <div class="panel-heading">ИНСТРУМЕНТЫ</div>
       <button class="tool active" data-tool="select"><span>⌖</span> Выбор</button>
@@ -61,8 +52,8 @@
       <button id="importBtn" class="secondary">ИМПОРТ JSON ↑</button>
       <input id="fileInput" type="file" accept="application/json" hidden>
     </aside>
-  </main>
-  <footer>GDPS EDITOR 2.3 <span>СОБСТВЕННЫЙ ПРОТОТИП РЕДАКТОРА · BUILD 0.1</span><span id="saveState">НЕ СОХРАНЕНО</span></footer>
-  <script src="app.js"></script>
-</body>
-</html>
+  </div>
+  <div class="editor-foot">GDPS EDITOR 2.3 <span>СОБСТВЕННЫЙ ПРОТОТИП · BUILD 0.2</span><span id="saveState">НЕ СОХРАНЕНО</span></div>
+</section>
+<section id="page-profile" class="page"><div class="page-heading"><div><span class="eyebrow">ТВОЯ УЧЁТНАЯ ЗАПИСЬ</span><h1>ПРОФИЛЬ</h1><p>Локальная статистика редактора.</p></div></div><div class="profile-card"><div class="avatar">G</div><div><h2>Создатель</h2><p>Профиль на этом устройстве</p></div><span class="local-tag">OFFLINE</span></div><div class="stats-grid"><div class="stat-card"><strong id="statLevels">0</strong><span>УРОВНЕЙ</span></div><div class="stat-card"><strong id="statObjects">0</strong><span>ОБЪЕКТОВ В ПРОЕКТАХ</span></div><div class="stat-card"><strong>2.3</strong><span>ВЕРСИЯ РЕДАКТОРА</span></div></div><p class="note">Сетевой аккаунт и публикация пока не подключены.</p></section>
+<section id="page-settings" class="page"><div class="page-heading"><div><span class="eyebrow">ПЕРСОНАЛИЗАЦИЯ</span><h1>НАСТРОЙКИ</h1><p>Настрой внешний вид и поведение редактора.</p></div></div><div class="settings-card"><div class="setting-row"><div><b>Показывать сетку</b><small>Сетка на рабочем поле</small></div><input id="settingGrid" type="checkbox" checked></div><div class="setting-row"><div><b>Привязка к сетке</b><small>Ровное размещение объектов</small></div><input id="settingSnap" type="checkbox" checked></div><div class="setting-row"><div><b>Анимация интерфейса</b><small>Плавные переходы между экранами</small></div><input id="settingMotion" type="checkbox" checked></div><div class="setting-row"><div><b>Цвет оформления</b><small>Тема приложения</small></div><select id="settingTheme"><option value="purple">Фиолетовая</option><option value="blue">Синяя</option></select></div></div><div class="about-card"><b>GDPS EDITOR 2.3</b><p>Собственный интерфейсный прототип · версия 0.2</p><small>Создание уровней · Локальные проекты · Редактор</small></div></section></main><footer class="global-footer">GDPS EDITOR 2.3 <span>СОЗДАВАЙ СВОИ УРОВНИ</span><span>BUILD 0.2 · PREVIEW</span></footer><script src="app.js"></script><script src="shell.js"></script></body></html>

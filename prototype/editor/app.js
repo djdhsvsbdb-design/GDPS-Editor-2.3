@@ -51,5 +51,5 @@ $('#exportBtn').onclick=download;
 $('#importBtn').onclick=()=>$('#fileInput').click();
 $('#fileInput').onchange=async e=>{try{const d=JSON.parse(await e.target.files[0].text());if(d.format!=='gdps-editor-level'||!Array.isArray(d.objects))throw Error();snapshot();objects=d.objects;nextId=Math.max(0,...objects.map(o=>o.id))+1;$('#nameInput').value=d.name||'Импортированный уровень';$('#levelName').textContent=$('#nameInput').value;bg=d.background||'violet';$('#bgSelect').value=bg;select(null);toast('Уровень загружен')}catch{toast('Не удалось прочитать файл уровня')}e.target.value=''};
 $('#testBtn').onclick=()=>{testing=!testing;$('#testBtn').textContent=testing?'■ ВЫЙТИ ИЗ ТЕСТА':'▶ ТЕСТ УРОВНЯ';toast(testing?'Режим просмотра включён':'Режим просмотра выключен')};
-draw();
+draw();window.GDPSLevel={getObjects:()=>JSON.parse(JSON.stringify(objects)),load:p=>{objects=JSON.parse(JSON.stringify(p.objects||[]));nextId=Math.max(0,...objects.map(o=>o.id))+1;bg=p.background||'violet';$('#bgSelect').value=bg;select(null);draw()}};$('#gridToggle').addEventListener('change',draw);
 })();
