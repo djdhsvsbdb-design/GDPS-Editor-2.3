@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#100820">
+  <title>GDPS EDITOR 2.3 — Editor Preview</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">G</span><div><strong>GDPS EDITOR 2.3</strong><small>LEVEL WORKSHOP</small></div></div>
+    <div class="project"><span class="status-dot"></span><span id="levelName">Мой первый уровень</span><button id="renameBtn" class="icon-btn" title="Переименовать">✎</button></div>
+    <div class="top-actions"><button id="undoBtn" class="icon-btn" title="Отменить">↶</button><button id="redoBtn" class="icon-btn" title="Повторить">↷</button><button id="saveBtn" class="primary">СОХРАНИТЬ</button></div>
+  </header>
+  <main class="workspace">
+    <aside class="left-panel panel">
+      <div class="panel-heading">ИНСТРУМЕНТЫ</div>
+      <button class="tool active" data-tool="select"><span>⌖</span> Выбор</button>
+      <button class="tool" data-tool="move"><span>✥</span> Перемещение</button>
+      <button class="tool" data-tool="erase"><span>⌫</span> Ластик</button>
+      <div class="separator"></div>
+      <div class="panel-heading">МАСШТАБ</div>
+      <div class="zoom-row"><button id="zoomOut">−</button><span id="zoomValue">100%</span><button id="zoomIn">+</button></div>
+      <div class="separator"></div>
+      <div class="panel-heading">СЦЕНА</div>
+      <label class="switch-row"><span>Сетка</span><input id="gridToggle" type="checkbox" checked></label>
+      <label class="switch-row"><span>Привязка</span><input id="snapToggle" type="checkbox" checked></label>
+      <div class="hint">Выбери объект снизу и нажми на поле, чтобы добавить его.</div>
+    </aside>
+    <section class="editor-area">
+      <div class="canvas-toolbar"><span><i class="status-dot"></i> РЕДАКТОР УРОВНЯ</span><span id="objectCount">ОБЪЕКТОВ: 0</span><button id="testBtn" class="play-btn">▶ ТЕСТ УРОВНЯ</button></div>
+      <div class="canvas-wrap"><canvas id="levelCanvas" width="1200" height="620" aria-label="Поле редактирования уровня"></canvas><div id="toast" class="toast"></div></div>
+      <div class="timeline"><span>00:00</span><div class="timeline-track"><div class="timeline-fill"></div></div><span>ДЛИНА УРОВНЯ</span></div>
+      <div class="object-panel">
+        <div class="object-title"><span>ОБЪЕКТЫ</span><small>ВЫБЕРИ ЭЛЕМЕНТ ДЛЯ ДОБАВЛЕНИЯ</small></div>
+        <div class="object-grid">
+          <button class="object active" data-kind="block"><b>■</b><span>Блок</span></button>
+          <button class="object" data-kind="spike"><b>▲</b><span>Шип</span></button>
+          <button class="object" data-kind="platform"><b>▬</b><span>Платформа</span></button>
+          <button class="object" data-kind="orb"><b>●</b><span>Сфера</span></button>
+          <button class="object" data-kind="portal"><b>◉</b><span>Портал</span></button>
+          <button class="object" data-kind="saw"><b>✹</b><span>Пила</span></button>
+        </div>
+      </div>
+    </section>
+    <aside class="right-panel panel">
+      <div class="panel-heading">СВОЙСТВА</div>
+      <div id="emptyProperties" class="empty-state">Выбери объект на поле,<br>чтобы изменить его свойства.</div>
+      <div id="properties" hidden>
+        <label>ТИП ОБЪЕКТА<input id="propType" disabled></label>
+        <label>ПОЗИЦИЯ X<input id="propX" type="number"></label>
+        <label>ПОЗИЦИЯ Y<input id="propY" type="number"></label>
+        <button id="deleteSelected" class="danger">УДАЛИТЬ ОБЪЕКТ</button>
+      </div>
+      <div class="separator"></div>
+      <div class="panel-heading">УРОВЕНЬ</div>
+      <label>НАЗВАНИЕ<input id="nameInput" value="Мой первый уровень" maxlength="32"></label>
+      <label>ЦВЕТ ФОНА<select id="bgSelect"><option value="violet">Фиолетовый</option><option value="blue">Синий</option><option value="dark">Тёмный</option></select></label>
+      <button id="exportBtn" class="secondary">ЭКСПОРТ JSON ↓</button>
+      <button id="importBtn" class="secondary">ИМПОРТ JSON ↑</button>
+      <input id="fileInput" type="file" accept="application/json" hidden>
+    </aside>
+  </main>
+  <footer>GDPS EDITOR 2.3 <span>СОБСТВЕННЫЙ ПРОТОТИП РЕДАКТОРА · BUILD 0.1</span><span id="saveState">НЕ СОХРАНЕНО</span></footer>
+  <script src="app.js"></script>
+</body>
+</html>
