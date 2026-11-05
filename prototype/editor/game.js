@@ -88,6 +88,7 @@
   function retry() {
     if (!active) return;
     attempts += 1;
+    objects = level.objects.map((item) => ({ ...item, used: false }));
     player = {
       x: 125, y: GROUND - PLAYER_SIZE / 2, vy: 0,
       rotation: 0, grounded: true, alive: true, trail: []
@@ -210,7 +211,7 @@
   }
 
   function triangleHit(rect, triangle) {
-    const axes = [{ x: 1, y: 0 }, { x: 0, y: 1 }, { x: 0.447, y: 0.894 }, { x: -0.447, y: 0.894 }];
+    const axes = [{ x: 1, y: 0 }, { x: 0, y: 1 }, { x: 0.894, y: 0.447 }, { x: -0.894, y: 0.447 }];
     const corners = [
       { x: rect.left, y: rect.top }, { x: rect.right, y: rect.top },
       { x: rect.right, y: rect.bottom }, { x: rect.left, y: rect.bottom }
