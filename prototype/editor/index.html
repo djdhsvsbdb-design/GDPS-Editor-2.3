@@ -56,4 +56,29 @@
   <div class="editor-foot">GDPS EDITOR 2.3 <span>СОБСТВЕННЫЙ ПРОТОТИП · BUILD 0.2</span><span id="saveState">НЕ СОХРАНЕНО</span></div>
 </section>
 <section id="page-profile" class="page"><div class="page-heading"><div><span class="eyebrow">ТВОЯ УЧЁТНАЯ ЗАПИСЬ</span><h1>ПРОФИЛЬ</h1><p>Локальная статистика редактора.</p></div></div><div class="profile-card"><div class="avatar">G</div><div><h2>Создатель</h2><p>Профиль на этом устройстве</p></div><span class="local-tag">OFFLINE</span></div><div class="stats-grid"><div class="stat-card"><strong id="statLevels">0</strong><span>УРОВНЕЙ</span></div><div class="stat-card"><strong id="statObjects">0</strong><span>ОБЪЕКТОВ В ПРОЕКТАХ</span></div><div class="stat-card"><strong>2.3</strong><span>ВЕРСИЯ РЕДАКТОРА</span></div></div><p class="note">Сетевой аккаунт и публикация пока не подключены.</p></section>
-<section id="page-settings" class="page"><div class="page-heading"><div><span class="eyebrow">ПЕРСОНАЛИЗАЦИЯ</span><h1>НАСТРОЙКИ</h1><p>Настрой внешний вид и поведение редактора.</p></div></div><div class="settings-card"><div class="setting-row"><div><b>Показывать сетку</b><small>Сетка на рабочем поле</small></div><input id="settingGrid" type="checkbox" checked></div><div class="setting-row"><div><b>Привязка к сетке</b><small>Ровное размещение объектов</small></div><input id="settingSnap" type="checkbox" checked></div><div class="setting-row"><div><b>Анимация интерфейса</b><small>Плавные переходы между экранами</small></div><input id="settingMotion" type="checkbox" checked></div><div class="setting-row"><div><b>Цвет оформления</b><small>Тема приложения</small></div><select id="settingTheme"><option value="purple">Фиолетовая</option><option value="blue">Синяя</option></select></div></div><div class="about-card"><b>GDPS EDITOR 2.3</b><p>Собственный интерфейсный прототип · версия 0.2</p><small>Создание уровней · Локальные проекты · Редактор</small></div></section></main><footer class="global-footer">GDPS EDITOR 2.3 <span>СОЗДАВАЙ СВОИ УРОВНИ</span><span>BUILD 0.2 · PREVIEW</span></footer><script src="app.js"></script><script src="shell.js"></script></body></html>
+<section id="page-settings" class="page"><div class="page-heading"><div><span class="eyebrow">ПЕРСОНАЛИЗАЦИЯ</span><h1>НАСТРОЙКИ</h1><p>Настрой внешний вид и поведение редактора.</p></div></div><div class="settings-card"><div class="setting-row"><div><b>Показывать сетку</b><small>Сетка на рабочем поле</small></div><input id="settingGrid" type="checkbox" checked></div><div class="setting-row"><div><b>Привязка к сетке</b><small>Ровное размещение объектов</small></div><input id="settingSnap" type="checkbox" checked></div><div class="setting-row"><div><b>Анимация интерфейса</b><small>Плавные переходы между экранами</small></div><input id="settingMotion" type="checkbox" checked></div><div class="setting-row"><div><b>Цвет оформления</b><small>Тема приложения</small></div><select id="settingTheme"><option value="purple">Фиолетовая</option><option value="blue">Синяя</option></select></div></div><div class="about-card"><b>GDPS EDITOR 2.3</b><p>Собственный интерфейсный прототип · версия 0.2</p><small>Создание уровней · Локальные проекты · Редактор</small></div></section></main>
+<div id="gameOverlay" class="game-overlay" aria-hidden="true">
+  <header class="game-topbar">
+    <button id="gameBackBtn" class="game-back">← НАЗАД</button>
+    <div class="game-level-title"><b id="gameTitle">Мой уровень</b><small id="gameStatus">ПОПЫТКА 1</small></div>
+    <div class="game-progress" aria-label="Прогресс уровня"><i id="gameProgressFill"></i></div>
+    <strong id="gameProgressText">0%</strong>
+    <button id="gamePauseBtn" class="game-pause" aria-label="Пауза">Ⅱ</button>
+  </header>
+  <div class="game-stage">
+    <canvas id="gameCanvas" width="1280" height="620" aria-label="Игровое поле"></canvas>
+    <div id="gameMessage" class="game-message" hidden>
+      <div class="game-message-card">
+        <span class="game-message-mark">G</span>
+        <h2 id="gameMessageTitle">ПАУЗА</h2>
+        <p id="gameMessageText">Игра приостановлена.</p>
+        <div class="game-message-actions">
+          <button id="gamePrimary" class="game-primary">ПРОДОЛЖИТЬ</button>
+          <button id="gameSecondary" class="game-secondary">ВЫЙТИ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="game-controls"><span>SPACE / ↑ / W / НАЖАТИЕ — ПРЫЖОК</span><button id="gameJumpBtn">ПРЫЖОК</button></div>
+</div>
+<footer class="global-footer">GDPS EDITOR 2.3 <span>СОЗДАВАЙ СВОИ УРОВНИ</span><span>BUILD 0.2 · PREVIEW</span></footer><script src="app.js"></script><script src="game.js"></script><script src="shell.js"></script></body></html>
