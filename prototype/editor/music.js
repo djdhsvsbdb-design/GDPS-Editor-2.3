@@ -61,6 +61,7 @@
       volume: Math.max(0, Math.min(1, Number(value.volume ?? 0.7)))
     } : null;
     $('#musicNgUrl').value = metadata?.sourceUrl || '';
+    $('#musicAuthor').value = metadata?.author || '';
     $('#musicOffset').value = metadata?.offset || 0;
     $('#musicVolume').value = Math.round((metadata?.volume ?? 0.7) * 100);
     if (!metadata) {
@@ -105,7 +106,7 @@
       await storeFile(file, key);
       setMetadata({
         key, name: file.name, sourceUrl,
-        author: 'Укажи автора в описании уровня',
+        author: $('#musicAuthor').value.trim(),
         offset: Number($('#musicOffset').value) || 0,
         volume: Number($('#musicVolume').value) / 100
       });
@@ -120,6 +121,7 @@
     return {
       ...metadata,
       sourceUrl: $('#musicNgUrl').value.trim(),
+      author: $('#musicAuthor').value.trim(),
       offset: Math.max(0, Number($('#musicOffset').value) || 0),
       volume: Math.max(0, Math.min(1, Number($('#musicVolume').value) / 100))
     };

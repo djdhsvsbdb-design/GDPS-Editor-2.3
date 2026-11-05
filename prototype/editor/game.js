@@ -75,6 +75,7 @@
       objects: safeObjects(current.objects)
     };
     objects = level.objects;
+    if (Object.prototype.hasOwnProperty.call(current, 'music')) window.GDPSMusic?.setMetadata(current.music);
     window.GDPSMusic?.play();
     worldEnd = Math.max(1900, ...objects.map((item) => item.x + 600));
     attempts = 0;
@@ -89,6 +90,7 @@
   function retry() {
     if (!active) return;
     attempts += 1;
+    window.GDPSMusic?.play();
     objects = level.objects.map((item) => ({ ...item, used: false }));
     player = {
       x: 125, y: GROUND - PLAYER_SIZE / 2, vy: 0,
