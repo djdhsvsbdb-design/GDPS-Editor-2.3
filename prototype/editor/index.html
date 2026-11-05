@@ -50,6 +50,22 @@
       <label>ЦВЕТ ФОНА<select id="bgSelect"><option value="violet">Фиолетовый</option><option value="blue">Синий</option><option value="dark">Тёмный</option></select></label>
       <button id="exportBtn" class="secondary">ЭКСПОРТ JSON ↓</button>
       <button id="importBtn" class="secondary">ИМПОРТ JSON ↑</button>
+      <div class="separator"></div>
+      <div class="panel-heading">МУЗЫКА УРОВНЯ</div>
+      <label>ССЫЛКА НА NEWGROUNDS
+        <input id="musicNgUrl" type="url" placeholder="https://www.newgrounds.com/audio/listen/…">
+      </label>
+      <div class="music-actions">
+        <button id="musicOpenNg" class="secondary">ОТКРЫТЬ ТРЕК</button>
+        <button id="musicImportBtn" class="secondary">ИМПОРТИРОВАТЬ ФАЙЛ</button>
+      </div>
+      <input id="musicFile" type="file" accept="audio/*" hidden>
+      <label class="music-license"><input id="musicPermission" type="checkbox"> У меня есть разрешение или лицензия на использование этой музыки в игре</label>
+      <div id="musicStatus" class="music-status">Музыка не выбрана</div>
+      <audio id="musicPreview" controls preload="none"></audio>
+      <label>ГРОМКОСТЬ <input id="musicVolume" type="range" min="0" max="100" value="70"></label>
+      <label>СМЕЩЕНИЕ СТАРТА (СЕК.) <input id="musicOffset" type="number" min="0" step="0.1" value="0"></label>
+
       <input id="fileInput" type="file" accept="application/json" hidden>
     </aside>
   </div>
@@ -81,4 +97,4 @@
   </div>
   <div class="game-controls"><span>SPACE / ↑ / W / НАЖАТИЕ — ПРЫЖОК</span><button id="gameJumpBtn">ПРЫЖОК</button></div>
 </div>
-<footer class="global-footer">GDPS EDITOR 2.3 <span>СОЗДАВАЙ СВОИ УРОВНИ</span><span>BUILD 0.2 · PREVIEW</span></footer><script src="app.js"></script><script src="game.js"></script><script src="shell.js"></script></body></html>
+<footer class="global-footer">GDPS EDITOR 2.3 <span>СОЗДАВАЙ СВОИ УРОВНИ</span><span>BUILD 0.2 · PREVIEW</span></footer><script src="app.js"></script><script src="music.js"></script><script src="game.js"></script><script src="shell.js"></script></body></html>

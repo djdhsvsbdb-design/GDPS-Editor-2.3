@@ -48,3 +48,10 @@ body.game-active{overflow:hidden}
  .game-message-card h2{font-size:19px}
 }
 @media(prefers-reduced-motion:reduce){.game-progress i{transition:none}}
+
+.music-actions{display:grid;grid-template-columns:1fr;gap:6px}
+.music-license{display:flex!important;align-items:flex-start;gap:8px;line-height:1.5!important;letter-spacing:0!important;color:#c1afcf!important;font-size:10px!important}
+.music-license input{width:auto!important;margin:1px 0 0!important;accent-color:#a34dff}
+.music-status{font-size:10px;line-height:1.5;color:#bda4d6;padding:8px;background:#130b1e;border:1px solid #3c2850;border-radius:7px;overflow-wrap:anywhere}
+#musicPreview{display:block;width:100%;height:34px;margin:9px 0;filter:hue-rotate(20deg)}
+#musicVolume{accent-color:#a34dff!important}

@@ -75,6 +75,7 @@
       objects: safeObjects(current.objects)
     };
     objects = level.objects;
+    window.GDPSMusic?.play();
     worldEnd = Math.max(1900, ...objects.map((item) => item.x + 600));
     attempts = 0;
     titleNode.textContent = level.name;
@@ -111,6 +112,7 @@
 
   function close() {
     active = false;
+    window.GDPSMusic?.stop();
     mode = 'closed';
     cancelAnimationFrame(frameId);
     overlay.classList.remove('is-open');
@@ -127,6 +129,7 @@
   function pause() {
     if (mode !== 'running') return;
     mode = 'paused';
+    window.GDPSMusic?.pause();
     pauseButton.textContent = '▶';
     showMessage('ПАУЗА', 'Твой прогресс сохранён до следующей попытки.', 'ПРОДОЛЖИТЬ', 'ВЫЙТИ', resume, close);
   }
@@ -134,6 +137,7 @@
   function resume() {
     if (mode !== 'paused') return;
     mode = 'running';
+    window.GDPSMusic?.resume();
     pauseButton.textContent = 'Ⅱ';
     hideMessage();
     lastTime = performance.now();
@@ -143,6 +147,7 @@
   function fail() {
     if (mode !== 'running') return;
     mode = 'failed';
+    window.GDPSMusic?.stop();
     player.alive = false;
     burst(player.x, player.y, '#ff6f9b', 22);
     showMessage('ПОПЫТКА НЕ УДАЛАСЬ', 'Не останавливайся — попробуй пройти участок ещё раз.', 'ПОВТОРИТЬ', 'ВЫЙТИ', retry, close);
@@ -151,6 +156,7 @@
   function complete() {
     if (mode !== 'running') return;
     mode = 'complete';
+    window.GDPSMusic?.stop();
     const key = 'gdps-editor-best-v1';
     try {
       const records = JSON.parse(localStorage.getItem(key) || '{}');
