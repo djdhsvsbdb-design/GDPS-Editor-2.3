@@ -1,0 +1,14 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'com.gdps.editor'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.gdps.editor'
+        minSdk 23
+        targetSdk 35
+        versionCode 23
+        versionName '2.3'
+    }
+}
