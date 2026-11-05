@@ -315,7 +315,7 @@
   }
 
   function updateProgress() {
-    const percent = clamp(Math.floor((player?.x || 0) / worldEnd * 100), 0, 100);
+    const percent = clamp(Math.floor((player?.x || 0) / Math.max(1, worldEnd - 40) * 100), 0, 100);
     progressFill.style.width = percent + '%';
     progressText.textContent = percent + '%';
   }
@@ -524,10 +524,6 @@
   });
 
   window.GDPSGame = { start, close, retry, pause };
-  $('#testBtn')?.addEventListener('click', (event) => {
-    event.preventDefault();
-    start();
-  });
-  // app.js assigns this button before this file is loaded; replace that handler.
+  // app.js assigns the test button before this file loads; replace its handler.
   if ($('#testBtn')) $('#testBtn').onclick = () => start();
 })();
